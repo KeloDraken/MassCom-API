@@ -1,5 +1,6 @@
 package com.example.accessingdatajpa.controllers;
 
+import com.example.accessingdatajpa.dto.CreateUserDTO;
 import com.example.accessingdatajpa.dto.ResponseUser;
 import com.example.accessingdatajpa.entities.Property;
 import com.example.accessingdatajpa.entities.User;
@@ -53,8 +54,10 @@ public class UserController {
         return Optional.of(property);
     }
 
-    private void setUpUser(User user) {
-        long propertyId = user.getProperty().getId();
+    private User setUpUser(CreateUserDTO userDTO) {
+        User user = new User(userDTO.firstname(), userDTO.emailAddress(), userDTO.surname());
+
+        long propertyId = userDTO.propertyId();
         Optional<Property> property = getProperty(propertyId);
 
         if (property.isEmpty()) throw new RuntimeException(String.format("No such Property with id: %d", propertyId));
@@ -64,7 +67,7 @@ public class UserController {
         LocalDateTime now = LocalDateTime.now();
         user.setDateJoined(Timestamp.valueOf(now));
 
-        userRepository.save(user);
+        return userRepository.save(user);
     }
 
     @GetMapping(value = "/tenants/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -89,9 +92,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/tenants/register/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerTenant(@RequestBody User user) {
+    public ResponseEntity<User> registerTenant(@RequestBody CreateUserDTO userDTO) {
+        User user;
         try {
-            setUpUser(user);
+            user = setUpUser(userDTO);
         } catch (RuntimeException runtimeException) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
@@ -103,9 +107,10 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/register/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerAdminUser(@RequestBody User user) {
+    public ResponseEntity<User> registerAdminUser(@RequestBody CreateUserDTO userDTO) {
+        User user;
         try {
-            setUpUser(user);
+            user = setUpUser(userDTO);
         } catch (RuntimeException runtimeException) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }

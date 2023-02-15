@@ -27,7 +27,7 @@ public class PropertiesController {
 
     @PostMapping(value = "/properties/create/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Property> createNewProperty(@RequestBody CreateProperty property) {
-        Property newProperty = new Property(property.getPropertyName(), property.getPropertyAddress());
+        Property newProperty = new Property(property.propertyName(), property.propertyAddress());
         Property p = propertyRepository.save(newProperty);
         return new ResponseEntity<>(p, HttpStatus.CREATED);
     }
