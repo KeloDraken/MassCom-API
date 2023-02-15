@@ -9,7 +9,7 @@ import jakarta.persistence.Id;
 @Entity
 public class Property {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
     @Nullable
