@@ -2,45 +2,45 @@ package com.example.accessingdatajpa.entities;
 
 public class EmailAttachment {
 
-  private long id;
-  private long fileTypeId;
-  private String fileLocation;
-  private long emailMessageId;
+    private long id;
+    private long fileTypeId;
+    private String fileLocation;
+    private long emailMessageId;
 
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public long getFileTypeId() {
-    return fileTypeId;
-  }
-
-  public void setFileTypeId(long fileTypeId) {
-    this.fileTypeId = fileTypeId;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
 
-  public String getFileLocation() {
-    return fileLocation;
-  }
+    public long getFileTypeId() {
+        return fileTypeId;
+    }
 
-  public void setFileLocation(String fileLocation) {
-    this.fileLocation = fileLocation;
-  }
+    public void setFileTypeId(long fileTypeId) {
+        this.fileTypeId = fileTypeId;
+    }
 
 
-  public long getEmailMessageId() {
-    return emailMessageId;
-  }
+    public String getFileLocation() {
+        return fileLocation;
+    }
 
-  public void setEmailMessageId(long emailMessageId) {
-    this.emailMessageId = emailMessageId;
-  }
+    public void setFileLocation(String fileLocation) {
+        this.fileLocation = fileLocation;
+    }
+
+
+    public long getEmailMessageId() {
+        return emailMessageId;
+    }
+
+    public void setEmailMessageId(long emailMessageId) {
+        this.emailMessageId = emailMessageId;
+    }
 
 }

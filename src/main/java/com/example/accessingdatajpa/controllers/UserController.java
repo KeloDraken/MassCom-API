@@ -15,7 +15,7 @@ import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.Optional;
 
-import static com.example.accessingdatajpa.utils.parseId;
+import static com.example.accessingdatajpa.Utils.parseId;
 
 
 @RestController

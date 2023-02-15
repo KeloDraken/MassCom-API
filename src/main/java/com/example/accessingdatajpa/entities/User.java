@@ -1,6 +1,5 @@
 package com.example.accessingdatajpa.entities;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
