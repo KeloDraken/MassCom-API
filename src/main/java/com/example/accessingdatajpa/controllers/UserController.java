@@ -38,8 +38,8 @@ public class UserController {
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/users/{pathVariable}/")
-    public ResponseEntity<User> getUserById(@PathVariable("pathVariable") String pathVariable) {
+    @GetMapping("/users/{userId}/")
+    public ResponseEntity<User> getUserById(@PathVariable("userId") String pathVariable) {
         Optional<Long> userId = parseId(pathVariable);
 
         if (userId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
@@ -48,8 +48,8 @@ public class UserController {
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/users/{pathVariable}/emails/")
-    public ResponseEntity<Iterable<UserEmail>> getUserEmails(@PathVariable("pathVariable") String pathVariable) {
+    @GetMapping("/users/{userId}/emails/")
+    public ResponseEntity<Iterable<UserEmail>> getUserEmails(@PathVariable("userId") String pathVariable) {
         Optional<Long> userId = parseId(pathVariable);
 
         if (userId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
