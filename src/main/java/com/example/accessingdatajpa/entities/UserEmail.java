@@ -6,17 +6,18 @@ import java.sql.Timestamp;
 
 @Entity
 public class UserEmail {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
-    private long emailMessageId;
+
+    @ManyToOne
+    @JoinColumn(name = "emailMessageId")
+    private EmailMessage emailMessage;
     private String received;
     private java.sql.Timestamp datetimeReceived;
-
 
     public long getId() {
         return id;
@@ -26,7 +27,6 @@ public class UserEmail {
         this.id = id;
     }
 
-
     public User getUser() {
         return user;
     }
@@ -35,15 +35,13 @@ public class UserEmail {
         this.user = user;
     }
 
-
-    public long getEmailMessageId() {
-        return emailMessageId;
+    public EmailMessage getEmailMessage() {
+        return emailMessage;
     }
 
-    public void setEmailMessageId(long emailMessageId) {
-        this.emailMessageId = emailMessageId;
+    public void setEmailMessage(EmailMessage emailMessage) {
+        this.emailMessage = emailMessage;
     }
-
 
     public String getReceived() {
         return received;
@@ -52,7 +50,6 @@ public class UserEmail {
     public void setReceived(String received) {
         this.received = received;
     }
-
 
     public Timestamp getDatetimeReceived() {
         return datetimeReceived;
