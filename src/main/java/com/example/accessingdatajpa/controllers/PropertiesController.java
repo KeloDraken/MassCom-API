@@ -46,4 +46,5 @@ public class PropertiesController {
         propertyRepository.delete(property.get());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
+
 }
