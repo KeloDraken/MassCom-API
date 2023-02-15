@@ -22,16 +22,16 @@ import java.util.Optional;
 import static com.example.accessingdatajpa.Utils.parseId;
 
 @RestController
-public class TenantController {
+public class UserController {
     private final UserRepository userRepository;
     private final UserEmailRepository userEmailRepository;
     private final PropertyRepository propertyRepository;
     private final UserTypeRepository userTypeRepository;
 
-    public TenantController(UserRepository userRepository,
-                            UserEmailRepository userEmailRepository,
-                            PropertyRepository propertyRepository,
-                            UserTypeRepository userTypeRepository) {
+    public UserController(UserRepository userRepository,
+                          UserEmailRepository userEmailRepository,
+                          PropertyRepository propertyRepository,
+                          UserTypeRepository userTypeRepository) {
         this.userRepository = userRepository;
         this.userEmailRepository = userEmailRepository;
         this.propertyRepository = propertyRepository;
