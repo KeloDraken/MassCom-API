@@ -5,6 +5,7 @@ import com.example.accessingdatajpa.entities.UserEmail;
 import com.example.accessingdatajpa.repositories.UserEmailRepository;
 import com.example.accessingdatajpa.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -32,13 +33,13 @@ public class UserController {
         return Optional.of(user);
     }
 
-    @GetMapping("/users/")
+    @GetMapping(value = "/users/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<User>> all() {
         Iterable<User> users = userRepository.findAll();
         return new ResponseEntity<>(users, HttpStatus.OK);
     }
 
-    @GetMapping("/users/{userId}/")
+    @GetMapping(value = "/users/{userId}/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> getUserById(@PathVariable("userId") String pathVariable) {
         Optional<Long> userId = parseId(pathVariable);
 
@@ -48,7 +49,7 @@ public class UserController {
         return user.map(value -> new ResponseEntity<>(value, HttpStatus.OK)).orElseGet(() -> new ResponseEntity<>(HttpStatus.NOT_FOUND));
     }
 
-    @GetMapping("/users/{userId}/emails/")
+    @GetMapping(value = "/users/{userId}/emails/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<UserEmail>> getUserEmails(@PathVariable("userId") String pathVariable) {
         Optional<Long> userId = parseId(pathVariable);
 
