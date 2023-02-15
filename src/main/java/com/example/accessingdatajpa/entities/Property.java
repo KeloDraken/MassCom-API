@@ -1,5 +1,6 @@
 package com.example.accessingdatajpa.entities;
 
+import jakarta.annotation.Nullable;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -10,7 +11,10 @@ public class Property {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
+
+    @Nullable
     private String propertName;
+    @Nullable
     private String propertyAddress;
 
 

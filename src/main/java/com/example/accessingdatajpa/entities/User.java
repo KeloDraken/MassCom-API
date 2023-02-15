@@ -1,5 +1,7 @@
 package com.example.accessingdatajpa.entities;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import jakarta.annotation.Nullable;
 import jakarta.persistence.*;
 
 import java.sql.Timestamp;
@@ -7,19 +9,29 @@ import java.sql.Timestamp;
 @Entity
 @Table(name = "Users")
 public class User {
-
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @Nullable
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String emailAddress;
     private String userName;
     private String userSurname;
+
+    @Nullable
     private Timestamp dateJoined;
 
     @ManyToOne
     @JoinColumn(name = "propertyId")
     private Property propertyId;
 
+    public User(String userName, String userSurname, String emailAddress) {
+        this.userName = userName;
+        this.userSurname = userSurname;
+        this.emailAddress = emailAddress;
+    }
+
+    protected User() {
+    }
 
     public long getId() {
         return id;
@@ -28,7 +40,6 @@ public class User {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public String getEmailAddress() {
         return emailAddress;
