@@ -1,6 +1,6 @@
 package com.example.accessingdatajpa.controllers;
 
-import com.example.accessingdatajpa.dto.CreateUserDTO;
+import com.example.accessingdatajpa.dto.CreateUser;
 import com.example.accessingdatajpa.dto.ResponseUser;
 import com.example.accessingdatajpa.entities.Property;
 import com.example.accessingdatajpa.entities.User;
@@ -54,7 +54,7 @@ public class UserController {
         return Optional.of(property);
     }
 
-    private User setUpUser(CreateUserDTO userDTO) {
+    private User setUpUser(CreateUser userDTO) {
         User user = new User(userDTO.firstname(), userDTO.emailAddress(), userDTO.surname());
 
         long propertyId = userDTO.propertyId();
@@ -92,7 +92,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/tenants/register/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerTenant(@RequestBody CreateUserDTO userDTO) {
+    public ResponseEntity<User> registerTenant(@RequestBody CreateUser userDTO) {
         User user;
         try {
             user = setUpUser(userDTO);
@@ -107,7 +107,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/register/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerAdminUser(@RequestBody CreateUserDTO userDTO) {
+    public ResponseEntity<User> registerAdminUser(@RequestBody CreateUser userDTO) {
         User user;
         try {
             user = setUpUser(userDTO);

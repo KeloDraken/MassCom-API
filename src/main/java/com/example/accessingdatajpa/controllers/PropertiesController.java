@@ -6,10 +6,11 @@ import com.example.accessingdatajpa.repositories.PropertyRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
+
+import static com.example.accessingdatajpa.Utils.parseId;
 
 @RestController
 public class PropertiesController {
@@ -30,5 +31,19 @@ public class PropertiesController {
         Property newProperty = new Property(property.propertyName(), property.propertyAddress());
         Property p = propertyRepository.save(newProperty);
         return new ResponseEntity<>(p, HttpStatus.CREATED);
+    }
+
+    @DeleteMapping(value = "/properties/delete/{propertyId}/")
+    public ResponseEntity<Property> deleteProperty(@PathVariable("propertyId") String pathVariable) {
+        Optional<Long> propertyId = parseId(pathVariable);
+
+        if (propertyId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Optional<Property> property = propertyRepository.findById(propertyId.get());
+
+        if (property.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        propertyRepository.delete(property.get());
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 }
