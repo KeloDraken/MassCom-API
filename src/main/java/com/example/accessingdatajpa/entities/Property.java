@@ -18,6 +18,14 @@ public class Property {
     private String propertyAddress;
 
 
+    protected Property() {
+    }
+
+    public Property(String propertName, String propertyAddress) {
+        this.propertName = propertName;
+        this.propertyAddress = propertyAddress;
+    }
+
     public long getId() {
         return id;
     }
@@ -25,7 +33,6 @@ public class Property {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public String getPropertName() {
         return propertName;

@@ -1,5 +1,6 @@
 package com.example.accessingdatajpa.controllers;
 
+import com.example.accessingdatajpa.dto.CreateProperty;
 import com.example.accessingdatajpa.entities.Property;
 import com.example.accessingdatajpa.repositories.PropertyRepository;
 import org.springframework.http.HttpStatus;
@@ -25,8 +26,9 @@ public class PropertiesController {
     }
 
     @PostMapping(value = "/properties/create/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Property> createNewProperty(@RequestBody Property property) {
-        Property p = propertyRepository.save(property);
+    public ResponseEntity<Property> createNewProperty(@RequestBody CreateProperty property) {
+        Property newProperty = new Property(property.getPropertyName(), property.getPropertyAddress());
+        Property p = propertyRepository.save(newProperty);
         return new ResponseEntity<>(p, HttpStatus.CREATED);
     }
 }
