@@ -1,4 +1,4 @@
-package com.example.accessingdatajpa.repository;
+package com.example.accessingdatajpa.repositories;
 
 
 import com.example.accessingdatajpa.entities.User;
