@@ -2,6 +2,8 @@ package com.example.accessingdatajpa.entities;
 
 import jakarta.persistence.*;
 
+import java.sql.Timestamp;
+
 @Entity
 @Table(name = "Users")
 public class User {
@@ -12,7 +14,7 @@ public class User {
     private String emailAddress;
     private String userName;
     private String userSurname;
-    private java.sql.Timestamp dateJoined;
+    private Timestamp dateJoined;
 
     @ManyToOne
     @JoinColumn(name = "propertyId")
@@ -55,11 +57,11 @@ public class User {
     }
 
 
-    public java.sql.Timestamp getDateJoined() {
+    public Timestamp getDateJoined() {
         return dateJoined;
     }
 
-    public void setDateJoined(java.sql.Timestamp dateJoined) {
+    public void setDateJoined(Timestamp dateJoined) {
         this.dateJoined = dateJoined;
     }
 
