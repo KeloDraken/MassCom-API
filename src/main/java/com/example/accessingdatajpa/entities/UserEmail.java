@@ -1,56 +1,65 @@
 package com.example.accessingdatajpa.entities;
 
+import jakarta.persistence.*;
+
+import java.sql.Timestamp;
+
+@Entity
 public class UserEmail {
 
-  private long id;
-  private long userId;
-  private long emailMessageId;
-  private String received;
-  private java.sql.Timestamp datetimeReceived;
+    @Id
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private long id;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+    private long emailMessageId;
+    private String received;
+    private java.sql.Timestamp datetimeReceived;
 
 
-  public long getId() {
-    return id;
-  }
+    public long getId() {
+        return id;
+    }
 
-  public void setId(long id) {
-    this.id = id;
-  }
-
-
-  public long getUserId() {
-    return userId;
-  }
-
-  public void setUserId(long userId) {
-    this.userId = userId;
-  }
+    public void setId(long id) {
+        this.id = id;
+    }
 
 
-  public long getEmailMessageId() {
-    return emailMessageId;
-  }
+    public User getUser() {
+        return user;
+    }
 
-  public void setEmailMessageId(long emailMessageId) {
-    this.emailMessageId = emailMessageId;
-  }
-
-
-  public String getReceived() {
-    return received;
-  }
-
-  public void setReceived(String received) {
-    this.received = received;
-  }
+    public void setUserId(User user) {
+        this.user = user;
+    }
 
 
-  public java.sql.Timestamp getDatetimeReceived() {
-    return datetimeReceived;
-  }
+    public long getEmailMessageId() {
+        return emailMessageId;
+    }
 
-  public void setDatetimeReceived(java.sql.Timestamp datetimeReceived) {
-    this.datetimeReceived = datetimeReceived;
-  }
+    public void setEmailMessageId(long emailMessageId) {
+        this.emailMessageId = emailMessageId;
+    }
+
+
+    public String getReceived() {
+        return received;
+    }
+
+    public void setReceived(String received) {
+        this.received = received;
+    }
+
+
+    public Timestamp getDatetimeReceived() {
+        return datetimeReceived;
+    }
+
+    public void setDatetimeReceived(Timestamp datetimeReceived) {
+        this.datetimeReceived = datetimeReceived;
+    }
 
 }
