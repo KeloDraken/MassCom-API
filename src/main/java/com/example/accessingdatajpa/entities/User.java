@@ -7,11 +7,11 @@ import java.sql.Timestamp;
 
 @Entity
 @Table(name = "Users")
-public class User {
+public class User implements Comparable<User> {
     @Id
     @Nullable
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
     private String emailAddress;
     private String userName;
     private String userSurname;
@@ -39,7 +39,7 @@ public class User {
         isDeleted = deleted;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -88,4 +88,8 @@ public class User {
         this.propertyId = propertyId;
     }
 
+    @Override
+    public int compareTo(User user) {
+        return this.getId().compareTo(user.getId());
+    }
 }

@@ -2,6 +2,7 @@ package com.example.accessingdatajpa.controllers;
 
 import com.example.accessingdatajpa.dto.CreateUser;
 import com.example.accessingdatajpa.dto.ResponseUser;
+import com.example.accessingdatajpa.dto.UpdateUser;
 import com.example.accessingdatajpa.entities.Property;
 import com.example.accessingdatajpa.entities.User;
 import com.example.accessingdatajpa.entities.UserEmail;
@@ -129,7 +130,6 @@ public class UserController {
     @GetMapping(value = "/tenants/{tenantId}/emails/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<UserEmail>> getTenantEmails(@PathVariable("tenantId") String pathVariable) {
         Optional<Long> userId = parseId(pathVariable);
-
         if (userId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Optional<User> user = getUser(userId.get());
@@ -139,5 +139,24 @@ public class UserController {
         Iterable<UserEmail> userEmails = userEmailRepository.findUserEmailByUser(user.get());
 
         return new ResponseEntity<>(userEmails, HttpStatus.OK);
+    }
+
+    @PatchMapping(value = "/tenants/edit/{tenantId}/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> editTenant(@PathVariable("tenantId") String pathVariable, UpdateUser userDTO) {
+        Optional<Long> userId = parseId(pathVariable);
+        if (userId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
+        Optional<User> user = getUser(userId.get());
+
+        if (user.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        User u = user.get();
+
+        u.setUserName(userDTO.firstname());
+        u.setUserSurname(userDTO.surname());
+        u.setEmailAddress(userDTO.emailAddress());
+
+        userRepository.save(u);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 }
