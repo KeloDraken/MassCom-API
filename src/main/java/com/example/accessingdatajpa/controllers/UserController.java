@@ -75,7 +75,7 @@ public class UserController {
         if (userId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
 
         Optional<User> user = getUser(userId.get());
-        if (user.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (user.isEmpty() || user.get().isDeleted()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         UserType userType = userTypeRepository.getUserTypeByUserId(user.get().getId());
         ResponseUser responseUser = new ResponseUser(user.get(), userType);
@@ -106,7 +106,7 @@ public class UserController {
 
         Optional<User> user = getUser(userId.get());
 
-        if (user.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (user.isEmpty() || user.get().isDeleted()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
         Iterable<UserEmail> userEmails = userEmailRepository.findUserEmailByUser(user.get());
 
@@ -131,6 +131,15 @@ public class UserController {
         User updatedUser = userRepository.save(user);
 
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
+
+    @DeleteMapping(value = "/tenants/delete/{tenantId}/")
+    public ResponseEntity<User> deleteTenant(@PathVariable("tenantId") Long tenantId) {
+        User user = userRepository.findUserById(tenantId);
+        if (user == null || user.isDeleted()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        user.setDeleted(true);
+        userRepository.save(user);
+        return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 
     private Optional<User> getUser(long userId) {
