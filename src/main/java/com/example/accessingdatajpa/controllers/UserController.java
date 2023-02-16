@@ -42,16 +42,18 @@ public class UserController {
     }
 
     @PostMapping(value = "/admin/register/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerAdminUser(@RequestBody CreateUser userDTO) {
+    public ResponseEntity<Object> registerAdminUser(@RequestBody CreateUser userDTO) {
         User user;
 
         try {
             user = setUpUser(userDTO);
         } catch (RuntimeException runtimeException) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No such Property with id: %d", userDTO.propertyId()));
         }
 
-        if (user == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+        if (user == null) {
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This email already has an account associated with it");
+        }
 
         UserType userType = new UserType(user, "admin");
         userTypeRepository.save(userType);

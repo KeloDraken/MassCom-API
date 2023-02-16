@@ -35,7 +35,7 @@ public class PropertiesController {
         return new ResponseEntity<>(responseProperties, HttpStatus.OK);
     }
 
-    @PostMapping(value = "/properties/create/", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/properties/create/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ResponseProperty> createNewProperty(@RequestBody CreateProperty property) {
         Property newProperty = new Property(property.propertyName(), property.propertyAddress());
         Property p = propertyRepository.save(newProperty);
@@ -44,18 +44,27 @@ public class PropertiesController {
     }
 
     @DeleteMapping(value = "/properties/delete/{propertyId}/")
-    public ResponseEntity<ResponseProperty> deleteProperty(@PathVariable("propertyId") String pathVariable) {
+    public ResponseEntity<Object> deleteProperty(@PathVariable("propertyId") String pathVariable) {
         Optional<Long> propertyId = parseId(pathVariable);
 
-        if (propertyId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        if (propertyId.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(String.format("There is no such property with id %s", pathVariable));
+        }
 
         Optional<Property> property = propertyRepository.findById(propertyId.get());
 
-        if (property.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (property.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("The property with id %s does not exist", pathVariable));
+        }
 
         Property p = property.get();
 
-        if (p.isDeleted()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        if (p.isDeleted()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("The property with id %s does not exist", pathVariable));
+        }
 
         p.setDeleted(true);
         propertyRepository.save(p);
