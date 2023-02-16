@@ -11,11 +11,9 @@ public class EmailMessage {
     private String body;
     private String emailSubject;
     private java.sql.Timestamp sentDate;
-
     @OneToOne
     @JoinColumn(name = "senderId")
     private User sender;
-
     @OneToOne
     @JoinColumn(name = "recipientId")
     private User recipient;
@@ -24,7 +22,7 @@ public class EmailMessage {
     private boolean isDeleted = false;
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -32,7 +30,7 @@ public class EmailMessage {
     }
 
     public String getBody() {
-        return body;
+        return this.body;
     }
 
     public void setBody(String body) {
@@ -48,7 +46,7 @@ public class EmailMessage {
     }
 
     public java.sql.Timestamp getSentDate() {
-        return sentDate;
+        return this.sentDate;
     }
 
     public void setSentDate(java.sql.Timestamp sentDate) {
@@ -56,7 +54,7 @@ public class EmailMessage {
     }
 
     public User getSender() {
-        return sender;
+        return this.sender;
     }
 
     public void setSender(User sender) {
@@ -64,15 +62,15 @@ public class EmailMessage {
     }
 
     public User getRecipient() {
-        return recipient;
+        return this.recipient;
     }
 
     public void setRecipient(User recipient) {
         this.recipient = recipient;
     }
 
-    public String getHasAttachments() {
-        return hasAttachments;
+    public String hasAttachments() {
+        return this.hasAttachments;
     }
 
     public void setHasAttachments(String hasAttachments) {
@@ -80,18 +78,18 @@ public class EmailMessage {
     }
 
     public boolean isDraft() {
-        return isDraft;
+        return this.isDraft;
     }
 
     public void setDraft(boolean draft) {
-        isDraft = draft;
+        this.isDraft = draft;
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return this.isDeleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.isDeleted = deleted;
     }
 }

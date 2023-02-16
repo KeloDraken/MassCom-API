@@ -22,7 +22,7 @@ public class UserType {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -30,7 +30,7 @@ public class UserType {
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public void setUser(User user) {
@@ -38,7 +38,7 @@ public class UserType {
     }
 
     public String getUserType() {
-        return userType;
+        return this.userType;
     }
 
     public void setUserType(String userType) {

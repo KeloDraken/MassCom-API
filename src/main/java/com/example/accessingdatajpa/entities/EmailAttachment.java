@@ -16,7 +16,7 @@ public class EmailAttachment {
     private EmailMessage emailMessage;
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -24,7 +24,7 @@ public class EmailAttachment {
     }
 
     public AllowedAttachmentFileTypes getFileTypeId() {
-        return fileType;
+        return this.fileType;
     }
 
     public void setFileType(AllowedAttachmentFileTypes fileType) {
@@ -32,7 +32,7 @@ public class EmailAttachment {
     }
 
     public String getFileLocation() {
-        return fileLocation;
+        return this.fileLocation;
     }
 
     public void setFileLocation(String fileLocation) {
@@ -40,7 +40,7 @@ public class EmailAttachment {
     }
 
     public EmailMessage getEmailMessage() {
-        return emailMessage;
+        return this.emailMessage;
     }
 
     public void setEmailMessage(EmailMessage emailMessage) {

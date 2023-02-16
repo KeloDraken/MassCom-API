@@ -37,22 +37,9 @@ public class EmailController {
 
     @PostMapping(value = "/emails/send/")
     public ResponseEntity<Object> sendEmails(EmailMessageDTO emailMessageDTO) {
-        UserType userType = userTypeRepository.getUserTypeByUserId(emailMessageDTO.from());
-
-        User admin = userRepository.findUserById(emailMessageDTO.from());
-        boolean checkAdmin = !userType.getUserType().equalsIgnoreCase("admin") ||
-                admin.isDeleted() ||
-                !Objects.equals(emailMessageDTO.property(), admin.getProperty().getId());
-
-        if (checkAdmin) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("You don't have the right privileges to perform this action");
-        }
-
-        Optional<Property> property = propertyRepository.findById(emailMessageDTO.property());
-        if (property.isEmpty() || property.get().isDeleted()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("There is no such property with id %s", emailMessageDTO.property()));
-        }
+        // ukhumbule ukushitsha u-checkFailed to something else
+        ResponseEntity<Object> checkFailed = this.validateUsersBeforeSend(emailMessageDTO);
+        if (checkFailed != null) return checkFailed;
 
         StreamSupport.stream(userRepository.findAll().spliterator(), true)
                 .filter(user -> !user.isDeleted())
@@ -65,6 +52,38 @@ public class EmailController {
                     );
                     return user;
                 });
-        return ResponseEntity.status(HttpStatus.CREATED).body("Bulk emails have been successfully sent to all tenants");
+
+        return ResponseEntity.status(HttpStatus.CREATED).body("Emails have been successfully sent to all tenants");
+    }
+
+    private ResponseEntity<Object> validateUsersBeforeSend(EmailMessageDTO emailMessageDTO) {
+        User admin = this.userRepository.findUserById(emailMessageDTO.from());
+        if (admin.isDeleted()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("No such user with id %d", admin.getId()));
+        }
+
+        User tenant = this.userRepository.findUserById(emailMessageDTO.to());
+        if (tenant.isDeleted()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("No such user with id %d", admin.getId()));
+        }
+
+        UserType userType = this.userTypeRepository.getUserTypeByUserId(emailMessageDTO.from());
+        boolean checkAdmin = !userType.getUserType().equalsIgnoreCase("admin") ||
+                !Objects.equals(emailMessageDTO.property(), admin.getProperty().getId());
+
+        if (checkAdmin) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body("You don't have the right privileges to perform this action");
+        }
+
+        Optional<Property> property = this.propertyRepository.findById(emailMessageDTO.property());
+        if (property.isEmpty() || property.get().isDeleted()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("There is no such property with id %s", emailMessageDTO.property()));
+        }
+
+        return null;
     }
 }

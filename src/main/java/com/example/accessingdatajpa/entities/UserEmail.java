@@ -15,11 +15,11 @@ public class UserEmail {
     @ManyToOne
     @JoinColumn(name = "emailMessageId")
     private EmailMessage emailMessage;
-    private String received;
+    private boolean isReceived;
     private java.sql.Timestamp datetimeReceived;
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -27,7 +27,7 @@ public class UserEmail {
     }
 
     public User getUser() {
-        return user;
+        return this.user;
     }
 
     public void setUserId(User user) {
@@ -35,23 +35,23 @@ public class UserEmail {
     }
 
     public EmailMessage getEmailMessage() {
-        return emailMessage;
+        return this.emailMessage;
     }
 
     public void setEmailMessage(EmailMessage emailMessage) {
         this.emailMessage = emailMessage;
     }
 
-    public String getReceived() {
-        return received;
+    public boolean isReceived() {
+        return this.isReceived;
     }
 
-    public void setReceived(String received) {
-        this.received = received;
+    public void setIsReceived(boolean received) {
+        this.isReceived = received;
     }
 
     public Timestamp getDatetimeReceived() {
-        return datetimeReceived;
+        return this.datetimeReceived;
     }
 
     public void setDatetimeReceived(Timestamp datetimeReceived) {

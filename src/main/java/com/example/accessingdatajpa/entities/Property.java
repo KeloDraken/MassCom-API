@@ -11,12 +11,10 @@ public class Property implements Comparable<Property> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
     @Nullable
     private String propertyName;
     @Nullable
     private String propertyAddress;
-
     private boolean isDeleted = false;
 
     protected Property() {
@@ -28,31 +26,31 @@ public class Property implements Comparable<Property> {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return this.isDeleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.isDeleted = deleted;
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
         this.id = id;
     }
 
-    public String getPropertName() {
-        return propertyName;
+    public String getPropertyName() {
+        return this.propertyName;
     }
 
-    public void setPropertName(String propertyName) {
+    public void setPropertyName(String propertyName) {
         this.propertyName = propertyName;
     }
 
     public String getPropertyAddress() {
-        return propertyAddress;
+        return this.propertyAddress;
     }
 
     public void setPropertyAddress(String propertyAddress) {

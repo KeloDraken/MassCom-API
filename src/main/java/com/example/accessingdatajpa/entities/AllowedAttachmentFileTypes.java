@@ -22,7 +22,7 @@ public class AllowedAttachmentFileTypes {
     }
 
     public long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -30,7 +30,7 @@ public class AllowedAttachmentFileTypes {
     }
 
     public String getFileType() {
-        return fileType;
+        return this.fileType;
     }
 
     public void setFileType(String fileType) {
@@ -38,7 +38,7 @@ public class AllowedAttachmentFileTypes {
     }
 
     public String getFileExtension() {
-        return fileExtension;
+        return this.fileExtension;
     }
 
     public void setFileExtension(String fileExtension) {

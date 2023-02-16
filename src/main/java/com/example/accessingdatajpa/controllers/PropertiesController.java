@@ -1,7 +1,7 @@
 package com.example.accessingdatajpa.controllers;
 
-import com.example.accessingdatajpa.dto.CreateProperty;
-import com.example.accessingdatajpa.dto.ResponseProperty;
+import com.example.accessingdatajpa.dto.CreatePropertyDTO;
+import com.example.accessingdatajpa.dto.ResponsePropertyDTO;
 import com.example.accessingdatajpa.entities.Property;
 import com.example.accessingdatajpa.repositories.PropertyRepository;
 import org.springframework.http.HttpStatus;
@@ -13,8 +13,6 @@ import java.util.List;
 import java.util.Optional;
 import java.util.stream.StreamSupport;
 
-import static com.example.accessingdatajpa.Utils.parseId;
-
 @RestController
 public class PropertiesController {
     private final PropertyRepository propertyRepository;
@@ -24,51 +22,45 @@ public class PropertiesController {
     }
 
     @GetMapping(value = "/properties/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Iterable<ResponseProperty>> getAllProperties() {
-        Iterable<Property> properties = propertyRepository.findAll();
+    public ResponseEntity<Iterable<ResponsePropertyDTO>> getAllProperties() {
+        Iterable<Property> properties = this.propertyRepository.findAll();
 
-        List<ResponseProperty> responseProperties = StreamSupport.stream(properties.spliterator(), true)
+        List<ResponsePropertyDTO> responseProperties = StreamSupport.stream(properties.spliterator(), true)
                 .filter(property -> !property.isDeleted())
-                .map(property -> new ResponseProperty(property.getId(), property.getPropertName(), property.getPropertyAddress()))
+                .map(property -> new ResponsePropertyDTO(
+                        property.getId(),
+                        property.getPropertyName(),
+                        property.getPropertyAddress()
+                ))
                 .toList();
 
         return new ResponseEntity<>(responseProperties, HttpStatus.OK);
     }
 
     @PostMapping(value = "/properties/create/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ResponseProperty> createNewProperty(@RequestBody CreateProperty property) {
+    public ResponseEntity<ResponsePropertyDTO> createNewProperty(@RequestBody CreatePropertyDTO property) {
         Property newProperty = new Property(property.propertyName(), property.propertyAddress());
-        Property p = propertyRepository.save(newProperty);
-        ResponseProperty response = new ResponseProperty(p.getId(), p.getPropertName(), p.getPropertyAddress());
+
+        Property p = this.propertyRepository.save(newProperty);
+        ResponsePropertyDTO response = new ResponsePropertyDTO(p.getId(), p.getPropertyName(), p.getPropertyAddress());
+
         return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "/properties/delete/{propertyId}/")
-    public ResponseEntity<Object> deleteProperty(@PathVariable("propertyId") String pathVariable) {
-        Optional<Long> propertyId = parseId(pathVariable);
+    public ResponseEntity<Object> deleteProperty(@PathVariable("propertyId") Long pathVariable) {
+        Optional<Property> property = this.propertyRepository.findById(pathVariable);
 
-        if (propertyId.isEmpty()) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                    .body(String.format("There is no such property with id %s", pathVariable));
-        }
-
-        Optional<Property> property = propertyRepository.findById(propertyId.get());
-
-        if (property.isEmpty()) {
+        if (property.isEmpty() || property.get().isDeleted()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
                     .body(String.format("The property with id %s does not exist", pathVariable));
         }
 
         Property p = property.get();
-
-        if (p.isDeleted()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("The property with id %s does not exist", pathVariable));
-        }
-
         p.setDeleted(true);
-        propertyRepository.save(p);
-        return new ResponseEntity<>(HttpStatus.ACCEPTED);
+        this.propertyRepository.save(p);
+
+        return ResponseEntity.status(HttpStatus.ACCEPTED).body("Property successfully deleted");
     }
 
 }

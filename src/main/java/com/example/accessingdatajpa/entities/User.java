@@ -32,15 +32,15 @@ public class User implements Comparable<User> {
     }
 
     public boolean isDeleted() {
-        return isDeleted;
+        return this.isDeleted;
     }
 
     public void setDeleted(boolean deleted) {
-        isDeleted = deleted;
+        this.isDeleted = deleted;
     }
 
     public Long getId() {
-        return id;
+        return this.id;
     }
 
     public void setId(long id) {
@@ -48,7 +48,7 @@ public class User implements Comparable<User> {
     }
 
     public String getEmailAddress() {
-        return emailAddress;
+        return this.emailAddress;
     }
 
     public void setEmailAddress(String emailAddress) {
@@ -56,7 +56,7 @@ public class User implements Comparable<User> {
     }
 
     public String getUserName() {
-        return userName;
+        return this.userName;
     }
 
     public void setUserName(String userName) {
@@ -64,16 +64,15 @@ public class User implements Comparable<User> {
     }
 
     public String getUserSurname() {
-        return userSurname;
+        return this.userSurname;
     }
 
     public void setUserSurname(String userSurname) {
         this.userSurname = userSurname;
     }
 
-
     public Timestamp getDateJoined() {
-        return dateJoined;
+        return this.dateJoined;
     }
 
     public void setDateJoined(Timestamp dateJoined) {
@@ -81,7 +80,7 @@ public class User implements Comparable<User> {
     }
 
     public Property getProperty() {
-        return propertyId;
+        return this.propertyId;
     }
 
     public void setProperty(Property propertyId) {
