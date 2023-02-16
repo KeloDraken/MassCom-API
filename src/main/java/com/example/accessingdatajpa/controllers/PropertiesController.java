@@ -53,7 +53,14 @@ public class PropertiesController {
 
         if (property.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        propertyRepository.delete(property.get());
+        Property p = property.get();
+
+        if (p.isDeleted()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+        p.setDeleted(true);
+        propertyRepository.save(p);
+
+        //propertyRepository.delete(property.get());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

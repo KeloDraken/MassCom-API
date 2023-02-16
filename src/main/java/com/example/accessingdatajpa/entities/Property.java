@@ -7,10 +7,10 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 
 @Entity
-public class Property {
+public class Property implements Comparable<Property> {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private long id;
+    private Long id;
 
     @Nullable
     private String propertyName;
@@ -35,7 +35,7 @@ public class Property {
         isDeleted = deleted;
     }
 
-    public long getId() {
+    public Long getId() {
         return id;
     }
 
@@ -59,4 +59,8 @@ public class Property {
         this.propertyAddress = propertyAddress;
     }
 
+    @Override
+    public int compareTo(Property property) {
+        return this.getId().compareTo(property.getId());
+    }
 }
