@@ -16,7 +16,7 @@ public class User {
     private String userName;
     private String userSurname;
 
-    private boolean isDeleted;
+    private boolean isDeleted = false;
     @Nullable
     private Timestamp dateJoined;
     @ManyToOne

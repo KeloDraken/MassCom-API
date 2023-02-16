@@ -17,7 +17,7 @@ public class Property {
     @Nullable
     private String propertyAddress;
 
-    private boolean isDeleted;
+    private boolean isDeleted = false;
 
     protected Property() {
     }

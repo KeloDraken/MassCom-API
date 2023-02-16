@@ -21,8 +21,8 @@ public class EmailMessage {
     @JoinColumn(name = "recipientId")
     private User recipient;
     private String hasAttachments;
-    private boolean isDraft;
-    private boolean isDeleted;
+    private boolean isDraft = true;
+    private boolean isDeleted = false;
 
 
     public long getId() {
