@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.StreamSupport;
 
 import static com.example.accessingdatajpa.Utils.parseId;
 
@@ -88,7 +90,12 @@ public class UserController {
     @GetMapping(value = "/tenants/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<User>> getAllUsers() {
         Iterable<User> users = userRepository.findAll();
-        return new ResponseEntity<>(users, HttpStatus.OK);
+
+        List<User> responseUsers = StreamSupport.stream(users.spliterator(), false)
+                .filter(user -> !user.isDeleted())
+                .toList();
+
+        return new ResponseEntity<>(responseUsers, HttpStatus.OK);
     }
 
     @GetMapping(value = "/tenants/{tenantId}/", produces = MediaType.APPLICATION_JSON_VALUE)

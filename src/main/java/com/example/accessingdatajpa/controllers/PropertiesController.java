@@ -28,6 +28,7 @@ public class PropertiesController {
         Iterable<Property> properties = propertyRepository.findAll();
 
         List<ResponseProperty> responseProperties = StreamSupport.stream(properties.spliterator(), false)
+                .filter(property -> !property.isDeleted())
                 .map(property -> new ResponseProperty(property.getId(), property.getPropertName(), property.getPropertyAddress()))
                 .toList();
 
