@@ -3,7 +3,9 @@ package com.example.accessingdatajpa.controllers;
 import com.example.accessingdatajpa.dto.CreateProperty;
 import com.example.accessingdatajpa.dto.ResponseProperty;
 import com.example.accessingdatajpa.entities.Property;
+import com.example.accessingdatajpa.entities.User;
 import com.example.accessingdatajpa.repositories.PropertyRepository;
+import com.example.accessingdatajpa.repositories.UserRepository;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
@@ -18,16 +20,18 @@ import static com.example.accessingdatajpa.Utils.parseId;
 @RestController
 public class PropertiesController {
     private final PropertyRepository propertyRepository;
+    private final UserRepository userRepository;
 
-    public PropertiesController(PropertyRepository propertyRepository) {
+    public PropertiesController(PropertyRepository propertyRepository, UserRepository userRepository) {
         this.propertyRepository = propertyRepository;
+        this.userRepository = userRepository;
     }
 
     @GetMapping(value = "/properties/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<ResponseProperty>> getAllProperties() {
         Iterable<Property> properties = propertyRepository.findAll();
 
-        List<ResponseProperty> responseProperties = StreamSupport.stream(properties.spliterator(), false)
+        List<ResponseProperty> responseProperties = StreamSupport.stream(properties.spliterator(), true)
                 .filter(property -> !property.isDeleted())
                 .map(property -> new ResponseProperty(property.getId(), property.getPropertName(), property.getPropertyAddress()))
                 .toList();
@@ -59,8 +63,6 @@ public class PropertiesController {
 
         p.setDeleted(true);
         propertyRepository.save(p);
-
-        //propertyRepository.delete(property.get());
         return new ResponseEntity<>(HttpStatus.ACCEPTED);
     }
 

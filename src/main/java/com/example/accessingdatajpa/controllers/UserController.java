@@ -51,6 +51,8 @@ public class UserController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
 
+        if (user == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+
         UserType userType = new UserType(user, "admin");
         userTypeRepository.save(userType);
 
@@ -63,6 +65,7 @@ public class UserController {
 
         List<User> responseUsers = StreamSupport.stream(users.spliterator(), false)
                 .filter(user -> !user.isDeleted())
+                .filter(user -> !user.getProperty().isDeleted())
                 .toList();
 
         return new ResponseEntity<>(responseUsers, HttpStatus.OK);
@@ -92,6 +95,12 @@ public class UserController {
         } catch (RuntimeException runtimeException) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
+
+        if (user == null) return new ResponseEntity<>(HttpStatus.CONFLICT);
+
+        Optional<Property> p = propertyRepository.findById(userDTO.propertyId());
+        if (p.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+
 
         UserType userType = new UserType(user, "tenant");
         userTypeRepository.save(userType);
@@ -155,7 +164,10 @@ public class UserController {
     }
 
     private User setUpUser(CreateUser userDTO) {
-        User user = new User(userDTO.firstname(), userDTO.surname(), userDTO.emailAddress());
+        User u = userRepository.findUsersByEmailAddress(userDTO.emailAddress().toLowerCase());
+        if (u != null) return null;
+
+        User user = new User(userDTO.firstname(), userDTO.surname(), userDTO.emailAddress().toLowerCase());
 
         long propertyId = userDTO.propertyId();
         Optional<Property> property = getProperty(propertyId);
