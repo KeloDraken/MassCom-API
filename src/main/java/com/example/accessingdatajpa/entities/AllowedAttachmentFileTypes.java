@@ -29,7 +29,6 @@ public class AllowedAttachmentFileTypes {
         this.id = id;
     }
 
-
     public String getFileType() {
         return fileType;
     }
@@ -38,7 +37,6 @@ public class AllowedAttachmentFileTypes {
         this.fileType = fileType;
     }
 
-
     public String getFileExtension() {
         return fileExtension;
     }
@@ -46,5 +44,4 @@ public class AllowedAttachmentFileTypes {
     public void setFileExtension(String fileExtension) {
         this.fileExtension = fileExtension;
     }
-
 }

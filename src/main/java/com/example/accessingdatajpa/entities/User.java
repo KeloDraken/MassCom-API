@@ -15,7 +15,6 @@ public class User {
     private String emailAddress;
     private String userName;
     private String userSurname;
-
     private boolean isDeleted = false;
     @Nullable
     private Timestamp dateJoined;
@@ -56,7 +55,6 @@ public class User {
         this.emailAddress = emailAddress;
     }
 
-
     public String getUserName() {
         return userName;
     }
@@ -64,7 +62,6 @@ public class User {
     public void setUserName(String userName) {
         this.userName = userName;
     }
-
 
     public String getUserSurname() {
         return userSurname;
@@ -82,7 +79,6 @@ public class User {
     public void setDateJoined(Timestamp dateJoined) {
         this.dateJoined = dateJoined;
     }
-
 
     public Property getProperty() {
         return propertyId;

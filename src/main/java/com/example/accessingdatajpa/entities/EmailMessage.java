@@ -5,7 +5,6 @@ import jakarta.persistence.*;
 
 @Entity
 public class EmailMessage {
-
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
@@ -24,7 +23,6 @@ public class EmailMessage {
     private boolean isDraft = true;
     private boolean isDeleted = false;
 
-
     public long getId() {
         return id;
     }
@@ -32,7 +30,6 @@ public class EmailMessage {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public String getBody() {
         return body;
@@ -42,7 +39,6 @@ public class EmailMessage {
         this.body = body;
     }
 
-
     public String getEmailSubject() {
         return emailSubject;
     }
@@ -51,7 +47,6 @@ public class EmailMessage {
         this.emailSubject = emailSubject;
     }
 
-
     public java.sql.Timestamp getSentDate() {
         return sentDate;
     }
@@ -59,7 +54,6 @@ public class EmailMessage {
     public void setSentDate(java.sql.Timestamp sentDate) {
         this.sentDate = sentDate;
     }
-
 
     public User getSender() {
         return sender;
@@ -76,7 +70,6 @@ public class EmailMessage {
     public void setRecipient(User recipient) {
         this.recipient = recipient;
     }
-
 
     public String getHasAttachments() {
         return hasAttachments;

@@ -13,7 +13,7 @@ public class Property {
     private long id;
 
     @Nullable
-    private String propertName;
+    private String propertyName;
     @Nullable
     private String propertyAddress;
 
@@ -22,8 +22,8 @@ public class Property {
     protected Property() {
     }
 
-    public Property(String propertName, String propertyAddress) {
-        this.propertName = propertName;
+    public Property(String propertyName, String propertyAddress) {
+        this.propertyName = propertyName;
         this.propertyAddress = propertyAddress;
     }
 
@@ -44,13 +44,12 @@ public class Property {
     }
 
     public String getPropertName() {
-        return propertName;
+        return propertyName;
     }
 
-    public void setPropertName(String propertName) {
-        this.propertName = propertName;
+    public void setPropertName(String propertyName) {
+        this.propertyName = propertyName;
     }
-
 
     public String getPropertyAddress() {
         return propertyAddress;

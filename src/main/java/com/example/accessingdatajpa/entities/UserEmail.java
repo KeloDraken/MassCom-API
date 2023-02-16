@@ -12,7 +12,6 @@ public class UserEmail {
     @ManyToOne
     @JoinColumn(name = "userId")
     private User user;
-
     @ManyToOne
     @JoinColumn(name = "emailMessageId")
     private EmailMessage emailMessage;
@@ -58,5 +57,4 @@ public class UserEmail {
     public void setDatetimeReceived(Timestamp datetimeReceived) {
         this.datetimeReceived = datetimeReceived;
     }
-
 }

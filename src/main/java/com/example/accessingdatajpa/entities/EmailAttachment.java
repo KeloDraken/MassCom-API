@@ -7,16 +7,13 @@ public class EmailAttachment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @OneToOne
     @JoinColumn(name = "fileTypeId")
     private AllowedAttachmentFileTypes fileType;
     private String fileLocation;
-
     @OneToOne
     @JoinColumn(name = "emailMessage")
     private EmailMessage emailMessage;
-
 
     public long getId() {
         return id;
@@ -26,7 +23,6 @@ public class EmailAttachment {
         this.id = id;
     }
 
-
     public AllowedAttachmentFileTypes getFileTypeId() {
         return fileType;
     }
@@ -35,7 +31,6 @@ public class EmailAttachment {
         this.fileType = fileType;
     }
 
-
     public String getFileLocation() {
         return fileLocation;
     }
@@ -43,7 +38,6 @@ public class EmailAttachment {
     public void setFileLocation(String fileLocation) {
         this.fileLocation = fileLocation;
     }
-
 
     public EmailMessage getEmailMessage() {
         return emailMessage;

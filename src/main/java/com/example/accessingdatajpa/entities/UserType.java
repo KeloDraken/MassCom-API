@@ -5,11 +5,9 @@ import jakarta.persistence.*;
 @Entity
 @Table(name = "userTypes")
 public class UserType {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-
     @OneToOne
     @JoinColumn(name = "userId")
     private User user;
@@ -23,7 +21,6 @@ public class UserType {
         this.userType = userType;
     }
 
-
     public long getId() {
         return id;
     }
@@ -31,7 +28,6 @@ public class UserType {
     public void setId(long id) {
         this.id = id;
     }
-
 
     public User getUser() {
         return user;
@@ -41,7 +37,6 @@ public class UserType {
         this.user = user;
     }
 
-
     public String getUserType() {
         return userType;
     }
@@ -49,5 +44,4 @@ public class UserType {
     public void setUserType(String userType) {
         this.userType = userType;
     }
-
 }

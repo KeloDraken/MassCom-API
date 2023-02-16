@@ -42,17 +42,13 @@ public class UserController {
 
     private Optional<User> getUser(long userId) {
         User user = userRepository.findUserById(userId);
-
         if (user == null) return Optional.empty();
-
         return Optional.of(user);
     }
 
     private Optional<Property> getProperty(long propertyId) {
         Property property = propertyRepository.getPropertiesById(propertyId);
-
         if (property == null) return Optional.empty();
-
         return Optional.of(property);
     }
 
@@ -75,6 +71,7 @@ public class UserController {
     @PostMapping(value = "/admin/register/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> registerAdminUser(@RequestBody CreateUser userDTO) {
         User user;
+
         try {
             user = setUpUser(userDTO);
         } catch (RuntimeException runtimeException) {
@@ -116,6 +113,7 @@ public class UserController {
     @PostMapping(value = "/tenants/register/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> registerTenant(@RequestBody CreateUser userDTO) {
         User user;
+
         try {
             user = setUpUser(userDTO);
         } catch (RuntimeException runtimeException) {
