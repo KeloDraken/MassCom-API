@@ -16,9 +16,9 @@ public class User {
     private String userName;
     private String userSurname;
 
+    private boolean isDeleted;
     @Nullable
     private Timestamp dateJoined;
-
     @ManyToOne
     @JoinColumn(name = "propertyId")
     private Property propertyId;
@@ -30,6 +30,14 @@ public class User {
     }
 
     protected User() {
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public long getId() {

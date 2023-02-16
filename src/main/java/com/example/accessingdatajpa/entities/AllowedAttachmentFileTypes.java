@@ -1,11 +1,25 @@
 package com.example.accessingdatajpa.entities;
 
-public class AllowedAttachmentFileTypes {
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class AllowedAttachmentFileTypes {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String fileType;
     private String fileExtension;
 
+    protected AllowedAttachmentFileTypes() {
+    }
+
+    public AllowedAttachmentFileTypes(String fileType, String fileExtension) {
+        this.fileType = fileType;
+        this.fileExtension = fileExtension;
+    }
 
     public long getId() {
         return id;

@@ -17,6 +17,7 @@ public class Property {
     @Nullable
     private String propertyAddress;
 
+    private boolean isDeleted;
 
     protected Property() {
     }
@@ -24,6 +25,14 @@ public class Property {
     public Property(String propertName, String propertyAddress) {
         this.propertName = propertName;
         this.propertyAddress = propertyAddress;
+    }
+
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
     }
 
     public long getId() {

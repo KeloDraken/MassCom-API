@@ -70,6 +70,21 @@ public class UserController {
         return userRepository.save(user);
     }
 
+    @PostMapping(value = "/admin/register/", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<User> registerAdminUser(@RequestBody CreateUser userDTO) {
+        User user;
+        try {
+            user = setUpUser(userDTO);
+        } catch (RuntimeException runtimeException) {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+
+        UserType userType = new UserType(user, "admin");
+        userTypeRepository.save(userType);
+
+        return new ResponseEntity<>(HttpStatus.CREATED);
+    }
+
     @GetMapping(value = "/tenants/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Iterable<User>> getAllUsers() {
         Iterable<User> users = userRepository.findAll();
@@ -101,21 +116,6 @@ public class UserController {
         }
 
         UserType userType = new UserType(user, "tenant");
-        userTypeRepository.save(userType);
-
-        return new ResponseEntity<>(HttpStatus.CREATED);
-    }
-
-    @PostMapping(value = "/admin/register/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> registerAdminUser(@RequestBody CreateUser userDTO) {
-        User user;
-        try {
-            user = setUpUser(userDTO);
-        } catch (RuntimeException runtimeException) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
-
-        UserType userType = new UserType(user, "admin");
         userTypeRepository.save(userType);
 
         return new ResponseEntity<>(HttpStatus.CREATED);

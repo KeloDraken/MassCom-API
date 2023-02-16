@@ -21,7 +21,8 @@ public class EmailMessage {
     @JoinColumn(name = "recipientId")
     private User recipient;
     private String hasAttachments;
-    private String isDraft;
+    private boolean isDraft;
+    private boolean isDeleted;
 
 
     public long getId() {
@@ -85,13 +86,19 @@ public class EmailMessage {
         this.hasAttachments = hasAttachments;
     }
 
-
-    public String getIsDraft() {
+    public boolean isDraft() {
         return isDraft;
     }
 
-    public void setIsDraft(String isDraft) {
-        this.isDraft = isDraft;
+    public void setDraft(boolean draft) {
+        isDraft = draft;
     }
 
+    public boolean isDeleted() {
+        return isDeleted;
+    }
+
+    public void setDeleted(boolean deleted) {
+        isDeleted = deleted;
+    }
 }

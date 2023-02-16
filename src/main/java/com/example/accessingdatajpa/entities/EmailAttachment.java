@@ -1,11 +1,21 @@
 package com.example.accessingdatajpa.entities;
 
-public class EmailAttachment {
+import jakarta.persistence.*;
 
+@Entity
+public class EmailAttachment {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
-    private long fileTypeId;
+
+    @OneToOne
+    @JoinColumn(name = "fileTypeId")
+    private AllowedAttachmentFileTypes fileType;
     private String fileLocation;
-    private long emailMessageId;
+
+    @OneToOne
+    @JoinColumn(name = "emailMessage")
+    private EmailMessage emailMessage;
 
 
     public long getId() {
@@ -17,12 +27,12 @@ public class EmailAttachment {
     }
 
 
-    public long getFileTypeId() {
-        return fileTypeId;
+    public AllowedAttachmentFileTypes getFileTypeId() {
+        return fileType;
     }
 
-    public void setFileTypeId(long fileTypeId) {
-        this.fileTypeId = fileTypeId;
+    public void setFileType(AllowedAttachmentFileTypes fileType) {
+        this.fileType = fileType;
     }
 
 
@@ -35,12 +45,12 @@ public class EmailAttachment {
     }
 
 
-    public long getEmailMessageId() {
-        return emailMessageId;
+    public EmailMessage getEmailMessage() {
+        return emailMessage;
     }
 
-    public void setEmailMessageId(long emailMessageId) {
-        this.emailMessageId = emailMessageId;
+    public void setEmailMessage(EmailMessage emailMessage) {
+        this.emailMessage = emailMessage;
     }
 
 }
