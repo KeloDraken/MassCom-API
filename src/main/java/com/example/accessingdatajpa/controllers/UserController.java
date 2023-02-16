@@ -41,34 +41,6 @@ public class UserController {
         this.userTypeRepository = userTypeRepository;
     }
 
-    private Optional<User> getUser(long userId) {
-        User user = userRepository.findUserById(userId);
-        if (user == null) return Optional.empty();
-        return Optional.of(user);
-    }
-
-    private Optional<Property> getProperty(long propertyId) {
-        Property property = propertyRepository.getPropertiesById(propertyId);
-        if (property == null) return Optional.empty();
-        return Optional.of(property);
-    }
-
-    private User setUpUser(CreateUser userDTO) {
-        User user = new User(userDTO.firstname(), userDTO.surname(), userDTO.emailAddress());
-
-        long propertyId = userDTO.propertyId();
-        Optional<Property> property = getProperty(propertyId);
-
-        if (property.isEmpty()) throw new RuntimeException(String.format("No such Property with id: %d", propertyId));
-
-        user.setProperty(property.get());
-
-        LocalDateTime now = LocalDateTime.now();
-        user.setDateJoined(Timestamp.valueOf(now));
-
-        return userRepository.save(user);
-    }
-
     @PostMapping(value = "/admin/register/", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<User> registerAdminUser(@RequestBody CreateUser userDTO) {
         User user;
@@ -141,22 +113,51 @@ public class UserController {
         return new ResponseEntity<>(userEmails, HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/tenants/edit/{tenantId}/", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<User> editTenant(@PathVariable("tenantId") String pathVariable, UpdateUser userDTO) {
-        Optional<Long> userId = parseId(pathVariable);
-        if (userId.isEmpty()) return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+    @PatchMapping(value = "/tenants/edit/{tenantId}/")
+    public ResponseEntity<User> editTenant(@PathVariable("tenantId") Long tenantId, UpdateUser userDTO) {
+        User user = userRepository.findUserById(tenantId);
+        if (user == null) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
-        Optional<User> user = getUser(userId.get());
+        if (userDTO.firstname() != null && !userDTO.firstname().isEmpty() && !userDTO.firstname().isBlank()) {
+            user.setUserName(userDTO.firstname());
+        }
+        if (userDTO.surname() != null && !userDTO.surname().isEmpty() && !userDTO.surname().isBlank()) {
+            user.setUserSurname(userDTO.surname());
+        }
+        if (userDTO.emailAddress() != null && !userDTO.emailAddress().isEmpty() && !userDTO.emailAddress().isBlank()) {
+            user.setEmailAddress(userDTO.emailAddress());
+        }
 
-        if (user.isEmpty()) return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        User updatedUser = userRepository.save(user);
 
-        User u = user.get();
+        return new ResponseEntity<>(updatedUser, HttpStatus.OK);
+    }
 
-        u.setUserName(userDTO.firstname());
-        u.setUserSurname(userDTO.surname());
-        u.setEmailAddress(userDTO.emailAddress());
+    private Optional<User> getUser(long userId) {
+        User user = userRepository.findUserById(userId);
+        if (user == null) return Optional.empty();
+        return Optional.of(user);
+    }
 
-        userRepository.save(u);
-        return new ResponseEntity<>(HttpStatus.OK);
+    private Optional<Property> getProperty(long propertyId) {
+        Property property = propertyRepository.getPropertiesById(propertyId);
+        if (property == null) return Optional.empty();
+        return Optional.of(property);
+    }
+
+    private User setUpUser(CreateUser userDTO) {
+        User user = new User(userDTO.firstname(), userDTO.surname(), userDTO.emailAddress());
+
+        long propertyId = userDTO.propertyId();
+        Optional<Property> property = getProperty(propertyId);
+
+        if (property.isEmpty()) throw new RuntimeException(String.format("No such Property with id: %d", propertyId));
+
+        user.setProperty(property.get());
+
+        LocalDateTime now = LocalDateTime.now();
+        user.setDateJoined(Timestamp.valueOf(now));
+
+        return userRepository.save(user);
     }
 }
