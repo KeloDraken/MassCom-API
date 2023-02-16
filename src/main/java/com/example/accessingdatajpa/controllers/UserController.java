@@ -55,7 +55,7 @@ public class UserController {
     }
 
     private User setUpUser(CreateUser userDTO) {
-        User user = new User(userDTO.firstname(), userDTO.emailAddress(), userDTO.surname());
+        User user = new User(userDTO.firstname(), userDTO.surname(), userDTO.emailAddress());
 
         long propertyId = userDTO.propertyId();
         Optional<Property> property = getProperty(propertyId);
