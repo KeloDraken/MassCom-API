@@ -37,9 +37,8 @@ public class EmailController {
 
     @PostMapping(value = "/emails/send/")
     public ResponseEntity<Object> sendEmails(EmailMessageDTO emailMessageDTO) {
-        // ukhumbule ukushitsha u-checkFailed to something else
-        ResponseEntity<Object> checkFailed = this.validateUsersBeforeSend(emailMessageDTO);
-        if (checkFailed != null) return checkFailed;
+        ResponseEntity<Object> dtoErrors = this.validateUsersBeforeSend(emailMessageDTO);
+        if (dtoErrors != null) return dtoErrors;
 
         StreamSupport.stream(userRepository.findAll().spliterator(), true)
                 .filter(user -> !user.isDeleted())
@@ -63,12 +62,6 @@ public class EmailController {
                     .body(String.format("No such user with id %d", admin.getId()));
         }
 
-        User tenant = this.userRepository.findUserById(emailMessageDTO.to());
-        if (tenant.isDeleted()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("No such user with id %d", admin.getId()));
-        }
-
         UserType userType = this.userTypeRepository.getUserTypeByUserId(emailMessageDTO.from());
         boolean checkAdmin = !userType.getUserType().equalsIgnoreCase("admin") ||
                 !Objects.equals(emailMessageDTO.property(), admin.getProperty().getId());
@@ -76,6 +69,12 @@ public class EmailController {
         if (checkAdmin) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
                     .body("You don't have the right privileges to perform this action");
+        }
+
+        User tenant = this.userRepository.findUserById(emailMessageDTO.to());
+        if (tenant.isDeleted()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                    .body(String.format("No such user with id %d", admin.getId()));
         }
 
         Optional<Property> property = this.propertyRepository.findById(emailMessageDTO.property());
