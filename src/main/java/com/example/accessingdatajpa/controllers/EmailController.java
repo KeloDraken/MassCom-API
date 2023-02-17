@@ -78,12 +78,6 @@ public class EmailController {
                     .body("You don't have the right privileges to perform this action");
         }
 
-        User tenant = this.userRepository.findUserById(emailMessageDTO.to());
-        if (tenant.isDeleted()) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("No such user with id %d", admin.getId()));
-        }
-
         Optional<Property> property = this.propertyRepository.findById(emailMessageDTO.property());
         if (property.isEmpty() || property.get().isDeleted()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
