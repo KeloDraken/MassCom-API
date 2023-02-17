@@ -18,6 +18,14 @@ public class UserEmail {
     private boolean isReceived;
     private java.sql.Timestamp datetimeReceived;
 
+    protected UserEmail() {
+    }
+
+    public UserEmail(User user, EmailMessage emailMessage) {
+        this.user = user;
+        this.emailMessage = emailMessage;
+    }
+
     public long getId() {
         return this.id;
     }

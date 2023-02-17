@@ -21,12 +21,18 @@ public class EmailMessage {
     private boolean isDraft = true;
     private boolean isDeleted = false;
 
-    public long getId() {
-        return this.id;
+    protected EmailMessage() {
     }
 
-    public void setId(long id) {
-        this.id = id;
+    public EmailMessage(User sender, User recipient, String emailSubject, String emailBody) {
+        this.body = emailBody;
+        this.emailSubject = emailSubject;
+        this.sender = sender;
+        this.recipient = recipient;
+    }
+
+    public long getId() {
+        return this.id;
     }
 
     public String getBody() {

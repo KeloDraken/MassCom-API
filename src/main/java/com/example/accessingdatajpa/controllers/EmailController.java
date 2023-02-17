@@ -1,13 +1,8 @@
 package com.example.accessingdatajpa.controllers;
 
 import com.example.accessingdatajpa.dto.EmailMessageDTO;
-import com.example.accessingdatajpa.entities.Property;
-import com.example.accessingdatajpa.entities.User;
-import com.example.accessingdatajpa.entities.UserType;
-import com.example.accessingdatajpa.repositories.EmailRepository;
-import com.example.accessingdatajpa.repositories.PropertyRepository;
-import com.example.accessingdatajpa.repositories.UserRepository;
-import com.example.accessingdatajpa.repositories.UserTypeRepository;
+import com.example.accessingdatajpa.entities.*;
+import com.example.accessingdatajpa.repositories.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -15,24 +10,26 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.StreamSupport;
 
 @RestController
 public class EmailController {
     private final UserRepository userRepository;
-    private final EmailRepository emailRepository;
+    private final EmailMessageRepository emailRepository;
     private final UserTypeRepository userTypeRepository;
     private final PropertyRepository propertyRepository;
+    private final UserEmailRepository userEmailRepository;
 
     public EmailController(
             UserRepository userRepository,
-            EmailRepository emailRepository,
+            EmailMessageRepository emailRepository,
             UserTypeRepository userTypeRepository,
-            PropertyRepository propertyRepository) {
+            PropertyRepository propertyRepository,
+            UserEmailRepository userEmailRepository) {
         this.userRepository = userRepository;
         this.emailRepository = emailRepository;
         this.userTypeRepository = userTypeRepository;
         this.propertyRepository = propertyRepository;
+        this.userEmailRepository = userEmailRepository;
     }
 
     @PostMapping(value = "/emails/send/")
@@ -40,26 +37,36 @@ public class EmailController {
         ResponseEntity<Object> dtoErrors = this.validateUsersBeforeSend(emailMessageDTO);
         if (dtoErrors != null) return dtoErrors;
 
-        StreamSupport.stream(this.userRepository.findAll().spliterator(), true)
-                .filter(user -> !user.isDeleted())
-                .map(user -> {
-                    this.emailRepository.uspSendEmail(
-                            emailMessageDTO.from(),
-                            emailMessageDTO.to(),
-                            emailMessageDTO.subject(),
-                            emailMessageDTO.body()
-                    );
-                    return user;
-                });
+        for (User user : this.userRepository.findAll()) {
+            if (!user.isDeleted() && !user.getId().equals(emailMessageDTO.from())) {
+                System.out.println("in map");
+                this.sendMessage(emailMessageDTO, user);
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED).body("Emails have been successfully sent to all tenants");
     }
 
+    private void sendMessage(EmailMessageDTO emailMessageDTO, User user) {
+        Optional<User> sender = this.getUser(emailMessageDTO.from());
+
+        if (sender.isEmpty()) {
+            throw new RuntimeException(String.format("No such user with id: %d", emailMessageDTO.from()));
+        }
+
+        EmailMessage sentMessage = this.emailRepository.save(
+                new EmailMessage(sender.get(), user, emailMessageDTO.subject(), emailMessageDTO.body())
+        );
+        UserEmail userEmail = new UserEmail(user, sentMessage);
+        this.userEmailRepository.save(userEmail);
+        System.out.println("here");
+    }
+
     private ResponseEntity<Object> validateUsersBeforeSend(EmailMessageDTO emailMessageDTO) {
         User admin = this.userRepository.findUserById(emailMessageDTO.from());
-        if (admin.isDeleted()) {
+        if (admin == null || admin.isDeleted()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("No such user with id %d", admin.getId()));
+                    .body(String.format("No such user with id %d", emailMessageDTO.from()));
         }
 
         UserType userType = this.userTypeRepository.getUserTypeByUserId(emailMessageDTO.from());
@@ -84,5 +91,15 @@ public class EmailController {
         }
 
         return null;
+    }
+
+    private Optional<User> getUser(long userId) {
+        User user = userRepository.findUserById(userId);
+
+        if (user == null) {
+            return Optional.empty();
+        }
+
+        return Optional.of(user);
     }
 }

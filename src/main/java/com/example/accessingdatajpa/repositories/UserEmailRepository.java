@@ -6,4 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface UserEmailRepository extends JpaRepository<UserEmail, Long> {
     Iterable<UserEmail> findUserEmailByUser(User user);
+    UserEmail findUserEmailsByUser(User user);
 }
