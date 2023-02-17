@@ -40,10 +40,10 @@ public class EmailController {
         ResponseEntity<Object> dtoErrors = this.validateUsersBeforeSend(emailMessageDTO);
         if (dtoErrors != null) return dtoErrors;
 
-        StreamSupport.stream(userRepository.findAll().spliterator(), true)
+        StreamSupport.stream(this.userRepository.findAll().spliterator(), true)
                 .filter(user -> !user.isDeleted())
                 .map(user -> {
-                    emailRepository.uspSendEmail(
+                    this.emailRepository.uspSendEmail(
                             emailMessageDTO.from(),
                             emailMessageDTO.to(),
                             emailMessageDTO.subject(),
