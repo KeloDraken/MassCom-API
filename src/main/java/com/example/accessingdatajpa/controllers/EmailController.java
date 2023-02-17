@@ -59,7 +59,6 @@ public class EmailController {
         );
         UserEmail userEmail = new UserEmail(user, sentMessage);
         this.userEmailRepository.save(userEmail);
-        System.out.println("here");
     }
 
     private ResponseEntity<Object> validateUsersBeforeSend(EmailMessageDTO emailMessageDTO) {
