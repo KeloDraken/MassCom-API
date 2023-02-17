@@ -29,10 +29,7 @@ public class UserController {
     private final PropertyRepository propertyRepository;
     private final UserTypeRepository userTypeRepository;
 
-    public UserController(UserRepository userRepository,
-                          UserEmailRepository userEmailRepository,
-                          PropertyRepository propertyRepository,
-                          UserTypeRepository userTypeRepository) {
+    public UserController(UserRepository userRepository, UserEmailRepository userEmailRepository, PropertyRepository propertyRepository, UserTypeRepository userTypeRepository) {
         this.userRepository = userRepository;
         this.userEmailRepository = userEmailRepository;
         this.propertyRepository = propertyRepository;
@@ -58,13 +55,11 @@ public class UserController {
         try {
             user = this.setUpUser(userDTO);
         } catch (RuntimeException runtimeException) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("No such Property with id: %d", userDTO.propertyId()));
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(String.format("No such Property with id: %d", userDTO.propertyId()));
         }
 
         if (user == null) {
-            return ResponseEntity.status(HttpStatus.CONFLICT)
-                    .body("This email already has an account associated with it");
+            return ResponseEntity.status(HttpStatus.CONFLICT).body("This email already has an account associated with it");
         }
 
         UserType userType = new UserType(user, "admin");
@@ -136,13 +131,13 @@ public class UserController {
         return new ResponseEntity<>(userEmails, HttpStatus.OK);
     }
 
-    @PatchMapping(value = "/tenants/edit/{tenantId}/")
-    public ResponseEntity<Object> editTenant(@PathVariable("tenantId") Long tenantId, UpdateUserDTO userDTO) {
-        User user = this.userRepository.findUserById(tenantId);
+    @PatchMapping(value = "/users/edit/{userId}/")
+    public ResponseEntity<Object> editUser(@PathVariable("userId") Long userId, UpdateUserDTO userDTO) {
+        User user = this.userRepository.findUserById(userId);
 
         if (user == null) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("No such user with id: %d", tenantId));
+                    .body(String.format("No such user with id: %d", userId));
         }
 
         UserController.updateUserValues(userDTO, user);
@@ -151,13 +146,13 @@ public class UserController {
         return new ResponseEntity<>(updatedUser, HttpStatus.OK);
     }
 
-    @DeleteMapping(value = "/tenants/delete/{tenantId}/")
-    public ResponseEntity<Object> deleteTenant(@PathVariable("tenantId") Long tenantId) {
-        User user = this.userRepository.findUserById(tenantId);
+    @DeleteMapping(value = "/users/delete/{userId}/")
+    public ResponseEntity<Object> deleteUser(@PathVariable("userId") Long userId) {
+        User user = this.userRepository.findUserById(userId);
 
         if (user == null || user.isDeleted()) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                    .body(String.format("No such user with id: %d", tenantId));
+                    .body(String.format("No such user with id: %d", userId));
         }
 
         user.setDeleted(true);
