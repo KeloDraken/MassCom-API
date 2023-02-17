@@ -39,7 +39,6 @@ public class EmailController {
 
         for (User user : this.userRepository.findAll()) {
             if (!user.isDeleted() && !user.getId().equals(emailMessageDTO.from())) {
-                System.out.println("in map");
                 this.sendMessage(emailMessageDTO, user);
             }
         }
