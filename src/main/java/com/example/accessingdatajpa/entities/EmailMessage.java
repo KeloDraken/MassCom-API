@@ -4,10 +4,10 @@ package com.example.accessingdatajpa.entities;
 import jakarta.persistence.*;
 
 @Entity
-public class EmailMessage {
+public class EmailMessage implements Comparable<EmailMessage> {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private long id;
+    private Long id;
     private String body;
     private String emailSubject;
     private java.sql.Timestamp sentDate;
@@ -31,7 +31,7 @@ public class EmailMessage {
         this.recipient = recipient;
     }
 
-    public long getId() {
+    public Long getId() {
         return this.id;
     }
 
@@ -97,5 +97,10 @@ public class EmailMessage {
 
     public void setDeleted(boolean deleted) {
         this.isDeleted = deleted;
+    }
+
+    @Override
+    public int compareTo(EmailMessage emailMessage) {
+        return this.getId().compareTo(emailMessage.getId());
     }
 }
